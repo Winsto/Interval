@@ -33,5 +33,15 @@
 
             mockComparer.ReceivedWithAnyArgs().Compare(1, 1);
         }
+
+        [Test]
+        public void WhenToMethodIsCalledOnAnInstance_ThenReturnedInstanceShouldBeDifferent()
+        {
+            var firstInstance = new ClosedInterval<int>(lowerLimitPoint: 0, upperLimitPoint: 0);
+
+            var instanceFromToMethod = firstInstance.To(10);
+
+            Assert.IsFalse(ReferenceEquals(firstInstance, instanceFromToMethod));
+        }
     }
 }
