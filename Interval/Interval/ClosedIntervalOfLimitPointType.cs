@@ -37,7 +37,6 @@
         }
 
         public ClosedInterval(LimitPointType lowerLimitPoint, LimitPointType upperLimitPoint)
-
             : this(lowerLimitPoint, upperLimitPoint, Comparer<LimitPointType>.Default)
         { }
 
