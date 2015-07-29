@@ -25,9 +25,7 @@
         [Test]
         public void WhenConstructorIsCalledWithComparer_ThenGivenComparerShouldBeCalled()
         {
-            var mockComparer = Substitute.For<IComparer<int>>();
-
-            mockComparer.Compare(Arg.Any<int>(), Arg.Any<int>()).Returns(args => ((int)args[0]).CompareTo((int)args[1]));
+            var mockComparer = BuildMockIntComparer();
 
             var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: 1, upperLimitPoint: 5, comparesLimitPoints: mockComparer);
 
@@ -42,6 +40,16 @@
             var instanceFromToMethod = firstInstance.To(10);
 
             Assert.IsFalse(ReferenceEquals(firstInstance, instanceFromToMethod));
+        }
+
+        [Test]
+        public void WhenWithComparerIsCalledOnAnInstance_ThenReturnedInstanceshouldBeDifferent()
+        {
+            var firstInstance = new ClosedInterval<int>(lowerLimitPoint: 0, upperLimitPoint: 0);
+
+            var instanceFromWithComparerMethod = firstInstance.WithComparer(BuildMockIntComparer());
+
+            Assert.IsFalse(ReferenceEquals(firstInstance, instanceFromWithComparerMethod));
         }
 
         [Test]
@@ -81,6 +89,15 @@
                     Assert.Fail(System.String.Format("Point: {0} should be contained in interval.", candidatePoint));
                 }
             }
+        }
+
+        private static IComparer<int> BuildMockIntComparer()
+        {
+            var mockComparer = Substitute.For<IComparer<int>>();
+
+            mockComparer.Compare(Arg.Any<int>(), Arg.Any<int>()).Returns(args => ((int)args[0]).CompareTo((int)args[1]));
+
+            return mockComparer;
         }
     }
 }

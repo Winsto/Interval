@@ -1,5 +1,6 @@
 ﻿namespace Interval
 {
+    using System;
     using System.Collections.Generic;
 
     public struct ClosedInterval<LimitPointType>
@@ -49,6 +50,11 @@
         public ClosedInterval<LimitPointType> To(LimitPointType upperLimitPoint)
         {
             return new ClosedInterval<LimitPointType>(lowerLimitPoint: this.LowerLimitPoint, upperLimitPoint: upperLimitPoint);
+        }
+
+        public ClosedInterval<LimitPointType> WithComparer(IComparer<LimitPointType> comparer)
+        {
+            return new ClosedInterval<LimitPointType>(lowerLimitPoint: this.LowerLimitPoint, upperLimitPoint: this.UpperLimitPoint, comparesLimitPoints:comparer);
         }
 
         public bool Contains(LimitPointType candidatePoint)
