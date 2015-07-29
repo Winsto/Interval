@@ -53,6 +53,35 @@
         }
 
         [Test]
+        public void WhenWithComparerIsCalled_ThenGivenComparerShouldBeCalled()
+        {
+            var mockComparer = BuildMockIntComparer();
+
+            var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: 0, upperLimitPoint: 10);
+
+            classUnderTest.WithComparer(mockComparer);
+
+            mockComparer.ReceivedWithAnyArgs().Compare(1, 1);
+        }
+
+        [Test]
+        public void WhenWithComparerIsCalled_AndGivenComparerReversesLimits_ThenFinalInstanceShouldHaveReversedLimits()
+        {
+            var mockComparer = Substitute.For<IComparer<int>>();
+
+            mockComparer.Compare(Arg.Any<int>(), Arg.Any<int>()).Returns(args => -1 * ((int)args[0]).CompareTo((int)args[1]));
+
+            int originaLowerLimit = 1;
+            int originalUpperLimit = 10;
+
+            var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: originaLowerLimit, upperLimitPoint: originalUpperLimit).WithComparer(mockComparer);
+
+            bool limitsHaveBeenReversed = classUnderTest.UpperLimitPoint.Equals(originaLowerLimit) && classUnderTest.LowerLimitPoint.Equals(originalUpperLimit);
+
+            Assert.IsTrue(limitsHaveBeenReversed);
+        }
+
+        [Test]
         public void WhenContainsIsCalledWithAValueEqualToLowerLimt_ThenTrueShouldBeReturned()
         {
             int lowerLimit = 5;
