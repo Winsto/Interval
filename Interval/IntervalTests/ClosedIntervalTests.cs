@@ -43,5 +43,44 @@
 
             Assert.IsFalse(ReferenceEquals(firstInstance, instanceFromToMethod));
         }
+
+        [Test]
+        public void WhenContainsIsCalledWithAValueEqualToLowerLimt_ThenTrueShouldBeReturned()
+        {
+            int lowerLimit = 5;
+            int upperLimit = 10;
+
+            var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: lowerLimit, upperLimitPoint: upperLimit);
+
+            Assert.IsTrue(classUnderTest.Contains(lowerLimit));
+        }
+
+        [Test]
+        public void WhenContainsIsCalledWithAValueEqualToUpperLimt_ThenTrueShouldBeReturned()
+        {
+            int lowerLimit = 5;
+            int upperLimit = 10;
+
+            var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: lowerLimit, upperLimitPoint: upperLimit);
+
+            Assert.IsTrue(classUnderTest.Contains(upperLimit));
+        }
+
+        [Test]
+        public void WhenContainsIsCalledWithAllPointsBetweenLimits_ThenTrueShouldBeReturned()
+        {
+            var lowerLimit = 0;
+            var upperLimit = 10;
+
+            var classUnderTest = new ClosedInterval<int>(lowerLimitPoint: lowerLimit, upperLimitPoint: upperLimit);
+
+            foreach (int candidatePoint in System.Linq.Enumerable.Range(lowerLimit, (upperLimit - lowerLimit) + 1))
+            {
+                if (!classUnderTest.Contains(candidatePoint))
+                {
+                    Assert.Fail(System.String.Format("Point: {0} should be contained in interval.", candidatePoint));
+                }
+            }
+        }
     }
 }
